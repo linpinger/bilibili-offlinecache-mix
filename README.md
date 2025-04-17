@@ -13,11 +13,15 @@ bilibili(B站)android离线缓存导出并合成音视频及弹幕为MKV
 
 - 安卓版的termux应用里面有个 rish 支持 `shizuku` ，可以切换到 adb 权限，发现将termux下的golang编译的二进制文件放到 `TMPDIR=/data/local/tmp` 这个目录下，可以加上执行权限，我的另一个项目 `foxbook-golang` 里的程序可以执行，这样就可以在 adb 权限下启用一个http服务器，就可以通过http在termux普通用户中访问 `/sdcard/Android/data/tv.danmaku.bili/download/` ，这样就可以直接通过http地址，将音频视频流合并为视频 `ffmpeg -i http://127.0.0.1:2333/xxx/audio.m4s -i http://127.0.0.1:2333/xxx/video.m4s -c copy bili.mkv` 了，也可以通过http遍历该目录，获取json配置，弹幕xml，然后转换弹幕为ass字幕文件，即可将弹幕包含进视频了，这样基本就可以通过bash脚本来实现自己的目的，难点在于没有弹幕转字幕的现成工具，所幸找到了项目 <https://github.com/Hami-Lemon/converter> ，修改了一下，编译成termux和win下的版本
 
-- TODO: 将目录复制出来后的处理脚本还没写，大概只要修改一下 `bilibili.cache.sh` 的读取逻辑即可，或者也可以写个golang程序一步到位，这个以后再说，写好了再更新到这里
+- TODO: 也可以写个golang程序一步到位，这个以后再说，写好了再更新到这里
 
 # 文件说明:
 
-- `bilibili.cache.sh` : 脚本: 根据adb权限下执行命令 `cd /sdcard/Android/data/tv.danmaku.bili/download/; find . -name entry.json > /sdcard/entrys.lst` 生成的entrys.lst 来一行行处理从http服务器下载m4s以合成mkv，通过控制 entrys.lst 的内容可以分批处理以节省空间
+- `ShizukuRunner-debug.apk` : 可以自定义10+ sh 命令，例如可以`sh /sdcard/myscript.sh` 项目地址: <https://github.com/WuDi-ZhanShen/ShizukuRunner>
+
+- `bilibili.cache.sh` : termux脚本: 根据adb权限下执行命令 `cd /sdcard/Android/data/tv.danmaku.bili/download/; find . -name entry.json > /sdcard/entrys.lst` 生成的entrys.lst 来一行行处理从http服务器下载m4s以合成mkv，通过控制 entrys.lst 的内容可以分批处理以节省空间
+
+- `bilibili.cache.desk.sh` : win下minggw中的bash脚本: 查找当前目录下的entry.json，然后一行行处理，从上面那个文件简单修改的来，前提是将 `/sdcard/Android/data/tv.danmaku.bili/download/` 中的文件夹复制出来，可以使用 tc 或 ShizukuRunner-debug.apk 复制
 
 - `danmaku2ass_src.7z` : danmaku2ass 的源码
 
