@@ -9,7 +9,7 @@ cd /sdcard/;
 HR="http://127.0.0.1:2333"
 LST="entrys.lst"
 
-[[ -f $LST ]] || echo "# 错误: $LST 文件不存在" ; exit;
+[[ -f $LST ]] || { echo "# 错误: $LST 文件不存在" ; exit; }
 
 while IFS= read -r line
 do
@@ -63,6 +63,7 @@ echo "- rename $enname to $cnname";
 
 	[[ -f sub.ass ]] && rm sub.ass ;
 
+echo "$line" >> ${LST}.finished
 
 done < $LST
 
