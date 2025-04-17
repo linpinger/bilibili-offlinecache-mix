@@ -11,8 +11,10 @@ LST="entrys.lst"
 
 [[ -f $LST ]] || { echo "# 错误: $LST 文件不存在" ; exit; }
 
-while IFS= read -r line
+# 不能使用 while IFS= read -r line ，会出现莫名其妙的断行
+for line in $(cat $LST)
 do
+	[[ $line != "./"* ]] && { echo "# Error line: $line" ; exit ; }
 
 	echo "# $line"
 
@@ -65,7 +67,7 @@ echo "- rename $enname to $cnname";
 
 echo "$line" >> ${LST}.finished
 
-done < $LST
+done
 
 echo "# done";
 
