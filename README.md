@@ -13,9 +13,11 @@ bilibili(B站)android离线缓存导出并合成音视频及弹幕为MKV
 
 - 安卓版的termux应用里面有个 rish 支持 `shizuku` ，可以切换到 adb 权限，发现将termux下的golang编译的二进制文件放到 `TMPDIR=/data/local/tmp` 这个目录下，可以加上执行权限，我的另一个项目 `foxbook-golang` 里的程序可以执行，这样就可以在 adb 权限下启用一个http服务器，就可以通过http在termux普通用户中访问 `/sdcard/Android/data/tv.danmaku.bili/download/` ，这样就可以直接通过http地址，将音频视频流合并为视频 `ffmpeg -i http://127.0.0.1:2333/xxx/audio.m4s -i http://127.0.0.1:2333/xxx/video.m4s -c copy bili.mkv` 了，也可以通过http遍历该目录，获取json配置，弹幕xml，然后转换弹幕为ass字幕文件，即可将弹幕包含进视频了，这样基本就可以通过bash脚本来实现自己的目的，难点在于没有弹幕转字幕的现成工具，所幸找到了项目 <https://github.com/Hami-Lemon/converter> ，修改了一下，编译成termux和win下的版本
 
-- TODO: 也可以写个golang程序一步到位，这个以后再说，写好了再更新到这里
-
 # 文件说明:
+
+- `bilidb3_src.7z` : bilidb3 的源码：可以批量转当前目录下的所有bili缓存文件夹到mkv，可以扫描所有信息写入数据库，然后单独转换操作
+- `bilidb3_termux_android.7z` : bilidb3 android termux下的可执行程序
+- `bilidb3_win7p_x64.7z` : bilidb3 win 7+ x64 下的可执行程序
 
 - `ShizukuRunner-debug.apk` : 可以自定义10+ sh 命令，例如可以`sh /sdcard/myscript.sh` 项目地址: <https://github.com/WuDi-ZhanShen/ShizukuRunner>
 
